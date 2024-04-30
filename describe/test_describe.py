@@ -1,7 +1,7 @@
 import unittest
 import pandas as pd
 import numpy as np
-from describe import Describe  # Assuming `describe.py` contains the Describe class implementation
+from describe import Describe
 
 
 class TestDescribe(unittest.TestCase):

@@ -140,6 +140,7 @@ class Describe:
         ], axis=0)
 
         result = result.apply(lambda x: x.apply('{:.6f}'.format))
+        print(result)
         return result
 
 
@@ -148,7 +149,7 @@ def get_file(file_path):
     return fd
 
 
-data = get_file('../datasets/dataset_train.csv')
-describe = Describe(data)
+    data = get_file('../datasets/dataset_train.csv')
+    describe = Describe(data)
 
 
