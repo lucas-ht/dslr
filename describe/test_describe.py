@@ -1,7 +1,8 @@
 import unittest
 import pandas as pd
 import numpy as np
-from describe import Describe
+from math import sqrt
+from describe import Describe  # Assuming `describe.py` contains the Describe class implementation
 
 
 class TestDescribe(unittest.TestCase):
@@ -11,7 +12,8 @@ class TestDescribe(unittest.TestCase):
             'B': [1.5, 2.5, 3.5, 4.5, 5.5],
             'C': [1, 1, 1, 1, 1],
             'D': [1, 2, 3, 4, 5],
-            'E': [1, 2, 3, 4, 5]
+            'E': [1, 2, 3, 4, 5],
+            'Variance': [7, 8, 10, 11, 13]
         })
         self.describe = Describe(self.data)
 
@@ -42,6 +44,22 @@ class TestDescribe(unittest.TestCase):
         self.assertEqual(self.describe.mean(self.data['C']), 1)
         self.assertEqual(self.describe.mean(self.data['D']), 3)
         self.assertEqual(self.describe.mean(self.data['E']), 3)
+
+    def test_variance(self):
+        self.assertEqual(self.describe.variance(self.data['Variance']), 5.699999999999999)
+        self.assertEqual(self.describe.variance(self.data['A']), 2.5)
+        self.assertEqual(self.describe.variance(self.data['B']), 2.5)
+        self.assertEqual(self.describe.variance(self.data['C']), 0)
+        self.assertEqual(self.describe.variance(self.data['D']), 2.5)
+        self.assertEqual(self.describe.variance(self.data['E']), 2.5)
+
+    def test_ecart_type(self):
+        self.assertEqual(self.describe.ecart_type(self.data['A']), sqrt(2.5))
+        self.assertEqual(self.describe.ecart_type(self.data['B']), sqrt(2.5))
+        self.assertEqual(self.describe.ecart_type(self.data['C']),  0)
+        self.assertEqual(self.describe.ecart_type(self.data['D']), sqrt(2.5))
+        self.assertEqual(self.describe.ecart_type(self.data['E']),  sqrt(2.5))
+        self.assertEqual(self.describe.ecart_type(self.data['Variance']), sqrt(5.699999999999999))
 
     def test_std(self):
         self.assertAlmostEqual(self.describe.std(self.data['A']), 1.581139, places=6)
