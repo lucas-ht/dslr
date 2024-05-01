@@ -48,6 +48,33 @@ class Describe:
         """
         numeric_values = [x for x in column if pd.notnull(x)]
         return sum(numeric_values) / len(numeric_values) if numeric_values else np.nan
+    
+    def variance(self, column):
+        """
+        Calculate the variance of a given column.
+
+        Parameters:
+        column (list): A list of numeric values.
+
+        Returns:
+        float: The variance of the column.
+        """
+        numeric_values = [x for x in column if pd.notnull(x)]
+        mean = self.mean(numeric_values)
+        return sum((x - mean) ** 2 for x in numeric_values) / (len(numeric_values) - 1)
+
+    def ecart_type(self, column):
+        """
+        Calculate the standard deviation of a given column.
+
+        Parameters:
+        column (list): A list of numeric values.
+
+        Returns:
+        float: The standard deviation of the column.
+        """
+        V = self.variance(column)
+        return np.sqrt(V)
 
     def _calculate_quartile(self, column, quartile: float):
         """
@@ -114,7 +141,8 @@ class Describe:
         Generates descriptive statistics of the dataset.
 
         Args:
-        - percentiles (list): List of percentiles to include in the output. Default is [0.25, 0.5, 0.75].
+        - percentiles (list): List of percentiles to include in the output. 
+            Default is [0.25, 0.5, 0.75].
 
         Returns:
         - result (pd.DataFrame): DataFrame containing the descriptive statistics.
@@ -136,7 +164,9 @@ class Describe:
             self.min,
             *percentiles,
             self.max,
-            self.unique
+            self.unique,
+            self.variance,
+            self.ecart_type
         ], axis=0)
 
         result = result.apply(lambda x: x.apply('{:.6f}'.format))
@@ -149,7 +179,6 @@ def get_file(file_path):
     return fd
 
 
-    data = get_file('../datasets/dataset_train.csv')
-    describe = Describe(data)
-
-
+data = get_file('../datasets/dataset_train.csv')
+describe = Describe(data)
+describe.describe()
