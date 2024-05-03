@@ -7,12 +7,6 @@ on:
       - '.editorconfig'
       - 'README.md'
 
-  pull_request:
-    paths-ignore:
-      - 'assets/**'
-      - '.editorconfig'
-      - 'README.md'
-
 permissions:
   contents: read
 
@@ -22,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Set up Python 3.x
       uses: actions/setup-python@v3
@@ -35,4 +29,5 @@ jobs:
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
 
     - name: Run unit tests
-      run: python tests.py
+      run: |
+        python tests.py
