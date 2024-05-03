@@ -28,26 +28,6 @@ def test_describe_with_large_dataset():
     data_.describe()
 
 
-def test_describe_with_specific_percentiles():
-    percentiles = [.1, .4, .9]
-    data = pd.DataFrame({
-        'A': [1, 2, 3, 4, 5],
-        'B': [1.5, 2.5, 3.5, 4.5, 5.5],
-        'C': [1, 1, 1, 1, 1],
-        'D': [1, 2, 3, 4, 5],
-        'E': [1, 2, 3, 4, 5]
-    })
-    describe_ = Describe(data)
-    print('Data describe class method ')
-    describe_.describe()
-    print()
-    print('Data describe method with pandas')
-    print(data.describe())
-    print()
-    print('Data describe class method  with specific percentiles')
-    describe_.describe(percentiles=percentiles)
-
-
 if __name__ == '__main__':
     print('Test describe class method')
     test_describe()
@@ -55,5 +35,3 @@ if __name__ == '__main__':
     print('Test describe class method with large dataset')
     test_describe_with_large_dataset()
     print()
-    print('Test describe class method with specific percentiles')
-    test_describe_with_specific_percentiles()
