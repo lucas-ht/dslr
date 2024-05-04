@@ -2,6 +2,8 @@
 This module contains the constants for the Hogwarts dataset.
 """
 
+HOGWARTS_HOUSE = 'Hogwarts House'
+
 HOGWARTS_HOUSES = [
     'Gryffindor',
     'Hufflepuff',
