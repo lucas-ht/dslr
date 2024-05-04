@@ -1,3 +1,7 @@
+"""
+This module contains the describe implementation.
+"""
+
 from dslr.parser import Parser
 from dslr.math import *
 
@@ -34,8 +38,16 @@ def describe(df: pd.DataFrame):
     return result
 
 def main():
-    parser = Parser()
-    data = parser.read()
+    """
+    The main function of the describe module.
+    """
+
+    data = Parser().read_dataset()
+    print(f'Describe Function')
+    describe(data)
+    print()
+    print(f'Describe from Pandas')
+    print(data.head())
     print(data.describe())
 
 if __name__ == '__main__':

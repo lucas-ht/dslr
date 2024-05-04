@@ -3,26 +3,26 @@ import pandas as pd
 import numpy as np
 from math import isclose
 from math import ceil, floor
-from dslr.math import get_numeric_values, ft_sum_, ft_len, ft_min, ft_max, ft_count, ft_mean, ft_variance, ft_ecart_type, calculate_quartile, percentile_25, percentile_50, percentile_75, ft_std, ft_unique
+from dslr.math import *
 from describe import describe
 
 class TestMathFunctions(unittest.TestCase):
     def setUp(self):
-        self.df = pd.DataFrame({
-            'A': [1, 2, 3, 4, 5],
-            'B': [1.5, 2.5, 3.5, 4.5, 5.5],
-            'C': ['a', 'b', 'c', 'd', 'e']
-        })
         self.column = pd.Series([1, 2, 3, 4, 5, np.nan])
 
 
     def test_describe(self):
+        df = pd.DataFrame({
+            'A': [1, 2, 3, 4, 5],
+            'B': [1.5, 2.5, 3.5, 4.5, 5.5],
+            'C': ['a', 'b', 'c', 'd', 'e']
+        })
         expected_result = pd.DataFrame({
             'A': [5, 3.0, 1.581139, 1, 2, 3, 4, 5, 5, 2.5, 1.581139],
             'B': [5, 3.5, 1.581139, 1.5, 2.5, 3.5, 4.5, 5.5, 5, 2.5, 1.581139]
         }, index=['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max', 'unique', 'variance', 'ecart_type'])
 
-        result = describe(self.df)
+        result = describe(df)
         result['A'] = result['A'].astype(float)
         result['B'] = result['B'].astype(float)
         pd.testing.assert_frame_equal(result, expected_result)
@@ -66,8 +66,8 @@ class TestMathFunctions(unittest.TestCase):
         expected_result = [1, 2, 3, 4, 5]
         self.assertEqual(result, expected_result)
 
-    def test_ft_sum_(self):
-        result = ft_sum_(self.column)
+    def test_ft_sum(self):
+        result = ft_sum(self.column)
         expected_result = 15
         self.assertEqual(result, expected_result)
 
