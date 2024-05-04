@@ -1,0 +1,24 @@
+name: Check spelling
+
+on:
+  push:
+    paths-ignore:
+      - 'assets/**'
+      - '.editorconfig'
+      - 'README.md'
+
+permissions:
+  contents: read
+
+jobs:
+  spellcheck:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check spelling
+      uses: streetsidesoftware/cspell-action@v6
+      with:
+        incremental_files_only: false
