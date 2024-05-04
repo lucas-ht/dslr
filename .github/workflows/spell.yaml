@@ -2,10 +2,6 @@ name: Check spelling
 
 on:
   push:
-    paths-ignore:
-      - 'assets/**'
-      - '.editorconfig'
-      - 'README.md'
 
 permissions:
   contents: read
