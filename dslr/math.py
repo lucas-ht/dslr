@@ -12,7 +12,7 @@ def get_numeric_values(column: pd.Series):
             numeric_values.append(x)
     return numeric_values
 
-def ft_sum_(column):
+def ft_sum(column):
     """
         Calculate the sum of a given column.
     """
@@ -70,7 +70,7 @@ def ft_mean(column):
     """
     numeric_values = get_numeric_values(column)
     if numeric_values:
-        return ft_sum_(numeric_values) / ft_len(numeric_values) 
+        return ft_sum(numeric_values) / ft_len(numeric_values) 
     else:
         np.nan
 
