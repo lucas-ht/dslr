@@ -47,7 +47,6 @@ def main():
     describe(data)
     print()
     print(f'Describe from Pandas')
-    print(data.head())
     print(data.describe())
 
 if __name__ == '__main__':
