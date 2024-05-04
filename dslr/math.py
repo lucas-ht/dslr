@@ -80,11 +80,11 @@ def ft_variance(column):
     """
     numeric_values = get_numeric_values(column)
     mean = ft_mean(numeric_values)
-    itmes = 0
+    items = 0
     for x in numeric_values:
         if pd.notnull(x):
-            itmes += (x - mean) ** 2 
-    return itmes / (ft_len(numeric_values) - 1)
+            items += (x - mean) ** 2 
+    return items / (ft_len(numeric_values) - 1)
 
 def ft_ecart_type(column):
     """
