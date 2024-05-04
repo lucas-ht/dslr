@@ -101,7 +101,7 @@ class TestMathFunctions(unittest.TestCase):
         expected_result = 2.5
         self.assertEqual(result, expected_result)
 
-    def test_ft_ecart_type(self):
+    def test_FteCart_type(self):
         result = ft_ecart_type(self.column)
         expected_result = 1.5811388300841898
         self.assertTrue(isclose(result, expected_result))
