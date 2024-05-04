@@ -1,5 +1,3 @@
-import pandas as pd
-import numpy as np
 from dslr.parser import Parser
 from dslr.math import *
 
@@ -38,11 +36,6 @@ def describe(df: pd.DataFrame):
 def main():
     parser = Parser()
     data = parser.read()
-    print(f'Describe Function')
-    describe(data)
-    print()
-    print(f'Describe from Pandas')
-    print(data.head())
     print(data.describe())
 
 if __name__ == '__main__':
