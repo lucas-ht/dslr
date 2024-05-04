@@ -1,5 +1,5 @@
 """
-This module is used to display histograms of the dataset.
+This module is used to display a histogram of the dataset.
 """
 
 import logging
@@ -12,7 +12,7 @@ from dslr.hogwarts import HOGWARTS_HOUSE
 
 def main() -> None:
     """
-    The main function of the describe module.
+    The main function to display a histograms of the dataset.
     """
 
     parser = Parser()
@@ -22,7 +22,13 @@ def main() -> None:
     course = parser.read_course('course')
 
     df_grouped = df.groupby(HOGWARTS_HOUSE)[course]
-    df_grouped.plot(kind='hist', alpha=0.8, legend=True)
+    df_grouped.plot(
+        kind='hist',
+        alpha=0.6,
+        legend=True,
+        title=f'Histogram of {course} for each house',
+        bins=20,
+    )
 
     try:
         plt.show()
