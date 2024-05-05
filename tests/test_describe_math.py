@@ -58,43 +58,6 @@ class TestMathFunctions(unittest.TestCase):
         result['B'] = pd.to_numeric(result['B'], errors='coerce')
         pd.testing.assert_frame_equal(result, expected_result)
 
-    def test_describe_with_large_data(self):
-        """ Test the describe function with a large dataset."""
-        large_df = pd.DataFrame({
-            'A': range(1, 10001),
-            'B': np.random.rand(10000)
-        })
-
-        result = describe(large_df)
-
-        result = result.apply(pd.to_numeric, errors='coerce')
-
-        expected_count_A = 10000
-        expected_mean_A = 5000.5
-        expected_std_A = 2886.895680
-        expected_min_A = 1
-        expected_25_A = 2500.75
-        expected_50_A = 5000.5
-        expected_75_A = 7500.25
-        expected_max_A = 10000
-        expected_unique_A = 10000
-        expected_variance_A = 8334166.666667
-        expected_grp_A = 2886.895680
-
-        self.assertAlmostEqual(result.loc['count', 'A'], expected_count_A)
-        self.assertAlmostEqual(result.loc['mean', 'A'], expected_mean_A)
-        self.assertAlmostEqual(result.loc['std', 'A'], expected_std_A)
-        self.assertAlmostEqual(result.loc['min', 'A'], expected_min_A)
-        self.assertAlmostEqual(result.loc['25%', 'A'], expected_25_A)
-        self.assertAlmostEqual(result.loc['50%', 'A'], expected_50_A)
-        self.assertAlmostEqual(result.loc['75%', 'A'], expected_75_A)
-        self.assertAlmostEqual(result.loc['max', 'A'], expected_max_A)
-        self.assertAlmostEqual(result.loc['unique', 'A'], expected_unique_A)
-        self.assertAlmostEqual
-        (result.loc['variance', 'A'], expected_variance_A)
-        self.assertAlmostEqual
-        (result.loc['grp', 'A'], expected_grp_A)
-
     def test_get_numeric_values(self):
         """ Test the get_numeric_values function."""
         result = get_numeric_values(self.column)

@@ -1,6 +1,9 @@
+"""
+    This module contains functions to calculate statistics of a given column. 
+"""
+from math import ceil, floor
 import pandas as pd
 import numpy as np
-from math import ceil, floor
 
 
 def get_numeric_values(column: pd.Series):
@@ -47,8 +50,7 @@ def ft_min(column: pd.Series):
             if min_value is None or value < min_value:
                 min_value = value
         return min_value
-    else:
-        return np.nan
+    return np.nan
 
 
 def ft_max(column):
@@ -62,8 +64,7 @@ def ft_max(column):
             if max_value is None or value > max_value:
                 max_value = value
         return max_value
-    else:
-        return np.nan
+    return np.nan
 
 
 def ft_count(column):
@@ -79,8 +80,7 @@ def ft_mean(column):
     numeric_values = get_numeric_values(column)
     if numeric_values:
         return ft_sum(numeric_values) / ft_len(numeric_values)
-    else:
-        np.nan
+    return np.nan
 
 
 def ft_variance(column):
@@ -123,8 +123,7 @@ def calculate_quartile(column, quartile: float):
             lower = numeric_values[floor(index)] * (ceil(index) - index)
             upper = numeric_values[ceil(index)] * (index - floor(index))
             return (upper + lower)
-    else:
-        return np.nan
+    return np.nan
 
 
 def percentile_25(column):
@@ -167,4 +166,4 @@ def ft_unique(column):
         Calculate the number of unique values in a column.
     """
     numeric_values = get_numeric_values(column)
-    return len(set(numeric_values))
+    return ft_len(set(numeric_values))
