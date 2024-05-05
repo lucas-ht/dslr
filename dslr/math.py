@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 from math import ceil, floor
 
+
 def get_numeric_values(column: pd.Series):
     """
         Get the numeric values from a given column.
@@ -11,6 +12,7 @@ def get_numeric_values(column: pd.Series):
         if pd.notnull(x):
             numeric_values.append(x)
     return numeric_values
+
 
 def ft_sum(column):
     """
@@ -23,6 +25,7 @@ def ft_sum(column):
             sum_total += value 
     return sum_total
 
+
 def ft_len(column):
     """
         Calculate the length of a given column.
@@ -31,6 +34,7 @@ def ft_len(column):
     for _ in column:
         length += 1
     return length
+
 
 def ft_min(column: pd.Series):
     """
@@ -45,7 +49,8 @@ def ft_min(column: pd.Series):
         return min_value
     else:
         return np.nan
-    
+
+
 def ft_max(column):
     """
         Calculate the maximum value of a given column.
@@ -59,10 +64,12 @@ def ft_max(column):
         return max_value
     else:
         return np.nan
-    
+
+
 def ft_count(column):
     numeric_values = get_numeric_values(column)
     return ft_len(numeric_values)
+
 
 def ft_mean(column):
     """
@@ -73,6 +80,7 @@ def ft_mean(column):
         return ft_sum(numeric_values) / ft_len(numeric_values) 
     else:
         np.nan
+
 
 def ft_variance(column):
     """
@@ -86,6 +94,7 @@ def ft_variance(column):
             items += (x - mean) ** 2 
     return items / (ft_len(numeric_values) - 1)
 
+
 def ft_ecart_type(column):
     """
         Calculate the standard deviation of a given column.
@@ -93,12 +102,14 @@ def ft_ecart_type(column):
     V = ft_variance(column)
     return np.sqrt(V)
 
+
 def calculate_quartile(column, quartile: float):
     """
     Calculate the quartile value for a given column.
     Args:
         column (pandas.Series): The column containing numeric values.
-        quartile (float): The quartile value to calculate (0.25 for first quartile, 0.5 for median, 0.75 for third quartile).
+        quartile (float): The quartile value to calculate
+        (0.25 for first quartile, 0.5 for median, 0.75 for third quartile).
     Returns:
         float: The calculated quartile value.
     """
@@ -113,24 +124,28 @@ def calculate_quartile(column, quartile: float):
             return (upper + lower)
     else:
         return np.nan
-    
+
+
 def percentile_25(column):
     """
         Calculate the 25th percentile of a given column.
     """           
     return calculate_quartile(column, 0.25)
-    
+
+
 def percentile_50(column):
     """
         Calculate the median of a given column.
     """
     return calculate_quartile(column, 0.5)
 
+
 def percentile_75(column):
     """
         Calculate the 75th percentile of a given column.
     """
     return calculate_quartile(column, 0.75)
+
 
 def ft_std(column):
     """
@@ -144,6 +159,7 @@ def ft_std(column):
             sum_std += (x - mean) ** 2 
     std = np.sqrt(sum_std / (ft_len(numeric_values) - 1))
     return std
+
 
 def ft_unique(column):
     """

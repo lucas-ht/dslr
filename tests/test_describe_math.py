@@ -2,14 +2,29 @@ import unittest
 import pandas as pd
 import numpy as np
 from math import isclose
-from math import ceil, floor
-from dslr.math import *
+from dslr.math import (
+    get_numeric_values, 
+    ft_sum, 
+    ft_len, 
+    ft_min, 
+    ft_max, 
+    ft_count, 
+    ft_mean, 
+    ft_variance, 
+    ft_ecart_type, 
+    calculate_quartile, 
+    percentile_25, 
+    percentile_50, 
+    percentile_75, 
+    ft_std, 
+    ft_unique
+)
 from describe import describe
+
 
 class TestMathFunctions(unittest.TestCase):
     def setUp(self):
         self.column = pd.Series([1, 2, 3, 4, 5, np.nan])
-
 
     def test_describe(self):
         df = pd.DataFrame({
@@ -20,7 +35,20 @@ class TestMathFunctions(unittest.TestCase):
         expected_result = pd.DataFrame({
             'A': [5, 3.0, 1.581139, 1, 2, 3, 4, 5, 5, 2.5, 1.581139],
             'B': [5, 3.5, 1.581139, 1.5, 2.5, 3.5, 4.5, 5.5, 5, 2.5, 1.581139]
-        }, index=['count', 'mean', 'std', 'min', '25%', '50%', '75%', 'max', 'unique', 'variance', 'ecart_type'])
+        }, index=[
+            'count',
+            'mean',
+            'std',
+            'min',
+            '25%',
+            '50%',
+            '75%',
+            'max',
+            'unique',
+            'variance',
+            'ecart_type'
+        ]
+        )
 
         result = describe(df)
         result['A'] = result['A'].astype(float)
@@ -58,8 +86,10 @@ class TestMathFunctions(unittest.TestCase):
         self.assertAlmostEqual(result.loc['75%', 'A'], expected_75_A)
         self.assertAlmostEqual(result.loc['max', 'A'], expected_max_A)
         self.assertAlmostEqual(result.loc['unique', 'A'], expected_unique_A)
-        self.assertAlmostEqual(result.loc['variance', 'A'], expected_variance_A)
-        self.assertAlmostEqual(result.loc['ecart_type', 'A'], expected_ecart_type_A)
+        self.assertAlmostEqual
+        (result.loc['variance', 'A'], expected_variance_A)
+        self.assertAlmostEqual
+        (result.loc['ecart_type', 'A'], expected_ecart_type_A)
     
     def test_get_numeric_values(self):
         result = get_numeric_values(self.column)
@@ -135,6 +165,7 @@ class TestMathFunctions(unittest.TestCase):
         result = ft_unique(self.column)
         expected_result = 5
         self.assertEqual(result, expected_result)
+
 
 if __name__ == '__main__':
     unittest.main(verbosity=2)
