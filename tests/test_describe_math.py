@@ -54,8 +54,8 @@ class TestMathFunctions(unittest.TestCase):
         )
 
         result = describe(df)
-        result['A'] = result['A'].astype(float)
-        result['B'] = result['B'].astype(float)
+        result['A'] = pd.to_numeric(result['A'], errors='coerce')
+        result['B'] = pd.to_numeric(result['B'], errors='coerce')
         pd.testing.assert_frame_equal(result, expected_result)
 
     def test_describe_with_large_data(self):
