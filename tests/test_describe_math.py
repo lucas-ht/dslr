@@ -46,7 +46,7 @@ class TestMathFunctions(unittest.TestCase):
             'max',
             'unique',
             'variance',
-            'ecart_type'
+            'grp'
         ]
         )
 
@@ -58,7 +58,7 @@ class TestMathFunctions(unittest.TestCase):
     def test_describe_with_large_data(self):
         large_df = pd.DataFrame({
             'A': range(1, 10001),
-            'B': np.random.rand(10000)  
+            'B': np.random.rand(10000)
         })
 
         result = describe(large_df)
@@ -75,7 +75,7 @@ class TestMathFunctions(unittest.TestCase):
         expected_max_A = 10000
         expected_unique_A = 10000
         expected_variance_A = 8334166.666667
-        expected_ecart_type_A = 2886.895680
+        expected_grp_A = 2886.895680
 
         self.assertAlmostEqual(result.loc['count', 'A'], expected_count_A)
         self.assertAlmostEqual(result.loc['mean', 'A'], expected_mean_A)
@@ -89,7 +89,7 @@ class TestMathFunctions(unittest.TestCase):
         self.assertAlmostEqual
         (result.loc['variance', 'A'], expected_variance_A)
         self.assertAlmostEqual
-        (result.loc['ecart_type', 'A'], expected_ecart_type_A)
+        (result.loc['grp', 'A'], expected_grp_A)
 
     def test_get_numeric_values(self):
         result = get_numeric_values(self.column)

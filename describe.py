@@ -40,14 +40,14 @@ def describe(df: pd.DataFrame):
         percentile_75,
         ft_max,
         ft_unique,
-        ft_variance,   
+        ft_variance,
         ft_gaps
     ], axis=0)
 
     result.index = [
         'count', 'mean', 'std', 'min',
         '25%', '50%', '75%', 'max', 'unique',
-        'variance', 'ecart_type'
+        'variance', 'grp'
     ]
     result = result.apply(format_series)
     print(result)
