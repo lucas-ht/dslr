@@ -22,7 +22,7 @@ def ft_sum(column):
     sum_total = 0
     for value in numeric_values:
         if pd.notnull(value):
-            sum_total += value 
+            sum_total += value
     return sum_total
 
 
@@ -67,6 +67,7 @@ def ft_max(column):
 
 
 def ft_count(column):
+    """ Calculate the number of values in a given column."""
     numeric_values = get_numeric_values(column)
     return ft_len(numeric_values)
 
@@ -77,7 +78,7 @@ def ft_mean(column):
     """
     numeric_values = get_numeric_values(column)
     if numeric_values:
-        return ft_sum(numeric_values) / ft_len(numeric_values) 
+        return ft_sum(numeric_values) / ft_len(numeric_values)
     else:
         np.nan
 
@@ -91,7 +92,7 @@ def ft_variance(column):
     items = 0
     for x in numeric_values:
         if pd.notnull(x):
-            items += (x - mean) ** 2 
+            items += (x - mean) ** 2
     return items / (ft_len(numeric_values) - 1)
 
 
@@ -129,7 +130,7 @@ def calculate_quartile(column, quartile: float):
 def percentile_25(column):
     """
         Calculate the 25th percentile of a given column.
-    """           
+    """
     return calculate_quartile(column, 0.25)
 
 
@@ -156,7 +157,7 @@ def ft_std(column):
     sum_std = 0
     for x in numeric_values:
         if pd.notnull(x):
-            sum_std += (x - mean) ** 2 
+            sum_std += (x - mean) ** 2
     std = np.sqrt(sum_std / (ft_len(numeric_values) - 1))
     return std
 

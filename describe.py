@@ -21,6 +21,9 @@ from dslr.math import (
 
 
 def format_series(series):
+    """
+        Format the series.
+    """
     return series.map("{:.6f}".format)
 
 
