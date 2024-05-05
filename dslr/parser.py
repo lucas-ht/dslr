@@ -23,6 +23,7 @@ class Parser:
     Attributes:
         _file (str): The path to the dataset file.
     """
+
     _parser: argparse.ArgumentParser
 
     def __init__(self) -> None:
@@ -70,6 +71,21 @@ class Parser:
         except (pd.errors.EmptyDataError, pd.errors.ParserError) as e:
             logging.error('Could not parse the dataset from: `%s`: %s', file, e)
             sys.exit(1)
+
+
+    @staticmethod
+    def fill_dataset(df: pd.DataFrame) -> pd.DataFrame:
+        """
+        This method fills the missing values in the dataset.
+
+        Args:
+            dataset (pd.DataFrame): The dataset to fill.
+
+        Returns:
+            pd.DataFrame: The filled dataset.
+        """
+
+        return df.fillna(df.median())
 
 
     def read_model(self):
