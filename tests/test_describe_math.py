@@ -1,3 +1,4 @@
+""" Test the math functions."""
 import unittest
 from math import isclose
 import numpy as np
@@ -106,7 +107,7 @@ class TestMathFunctions(unittest.TestCase):
         expected_result = 2.5
         self.assertEqual(result, expected_result)
 
-    def test_FteCart_type(self):
+    def test_ft_grp(self):
         """ Test the ft_gaps function."""
         result = ft_gaps(self.column)
         expected_result = 1.5811388300841898

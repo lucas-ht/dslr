@@ -24,7 +24,7 @@ def format_series(series):
     """
         Format the series.
     """
-    return series.map("{:.6f}".format)
+    return series.map(lambda x: f"{x:.6f}")
 
 
 def describe(df: pd.DataFrame):

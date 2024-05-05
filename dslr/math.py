@@ -100,8 +100,8 @@ def ft_gaps(column):
     """
         Calculate the standard deviation of a given column.
     """
-    V = ft_variance(column)
-    return np.sqrt(V)
+    grp = ft_variance(column)
+    return np.sqrt(grp)
 
 
 def calculate_quartile(column, quartile: float):
@@ -119,10 +119,9 @@ def calculate_quartile(column, quartile: float):
         index = (ft_len(numeric_values) - 1) * quartile
         if index.is_integer():
             return numeric_values[int(index)]
-        else:
-            lower = numeric_values[floor(index)] * (ceil(index) - index)
-            upper = numeric_values[ceil(index)] * (index - floor(index))
-            return (upper + lower)
+        lower = numeric_values[floor(index)] * (ceil(index) - index)
+        upper = numeric_values[ceil(index)] * (index - floor(index))
+        return (upper + lower)
     return np.nan
 
 
