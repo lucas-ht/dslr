@@ -121,7 +121,7 @@ def calculate_quartile(column, quartile: float):
             return numeric_values[int(index)]
         lower = numeric_values[floor(index)] * (ceil(index) - index)
         upper = numeric_values[ceil(index)] * (index - floor(index))
-        return (upper + lower)
+        return upper + lower
     return np.nan
 
 
