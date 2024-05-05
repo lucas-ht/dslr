@@ -2,11 +2,27 @@
 This module contains the describe implementation.
 """
 
+import pandas as pd
+import numpy as np
 from dslr.parser import Parser
-from dslr.math import *
+from dslr.math import (
+    ft_min,
+    ft_max,
+    ft_count,
+    ft_mean,
+    ft_variance,
+    ft_gaps,
+    percentile_25,
+    percentile_50,
+    percentile_75,
+    ft_std,
+    ft_unique
+)
+
 
 def format_series(series):
     return series.map("{:.6f}".format)
+
 
 def describe(df: pd.DataFrame):
     """
@@ -21,11 +37,11 @@ def describe(df: pd.DataFrame):
         ft_min,
         percentile_25,
         percentile_50,
-        percentile_75,  
+        percentile_75,
         ft_max,
         ft_unique,
-        ft_variance,    
-        ft_ecart_type
+        ft_variance,   
+        ft_gaps
     ], axis=0)
 
     result.index = [
@@ -37,17 +53,19 @@ def describe(df: pd.DataFrame):
     print(result)
     return result
 
+
 def main():
     """
     The main function of the describe module.
     """
 
     data = Parser().read_dataset()
-    print(f'Describe Function')
+    print('Describe Function')
     describe(data)
     print()
-    print(f'Describe from Pandas')
+    print('Describe from Pandas')
     print(data.describe())
+
 
 if __name__ == '__main__':
     main()

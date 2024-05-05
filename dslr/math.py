@@ -95,7 +95,7 @@ def ft_variance(column):
     return items / (ft_len(numeric_values) - 1)
 
 
-def ft_ecart_type(column):
+def ft_gaps(column):
     """
         Calculate the standard deviation of a given column.
     """

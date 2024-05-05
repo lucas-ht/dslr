@@ -3,21 +3,21 @@ import pandas as pd
 import numpy as np
 from math import isclose
 from dslr.math import (
-    get_numeric_values, 
-    ft_sum, 
-    ft_len, 
-    ft_min, 
-    ft_max, 
-    ft_count, 
-    ft_mean, 
-    ft_variance, 
-    ft_ecart_type, 
-    calculate_quartile, 
-    percentile_25, 
-    percentile_50, 
-    percentile_75, 
-    ft_std, 
-    ft_unique
+    get_numeric_values,
+    ft_sum,
+    ft_len,
+    ft_min,
+    ft_max,
+    ft_count,
+    ft_mean,
+    ft_variance,
+    calculate_quartile,
+    percentile_25,
+    percentile_50,
+    percentile_75,
+    ft_std,
+    ft_unique,
+    ft_gaps
 )
 from describe import describe
 
@@ -90,7 +90,7 @@ class TestMathFunctions(unittest.TestCase):
         (result.loc['variance', 'A'], expected_variance_A)
         self.assertAlmostEqual
         (result.loc['ecart_type', 'A'], expected_ecart_type_A)
-    
+
     def test_get_numeric_values(self):
         result = get_numeric_values(self.column)
         expected_result = [1, 2, 3, 4, 5]
@@ -132,7 +132,7 @@ class TestMathFunctions(unittest.TestCase):
         self.assertEqual(result, expected_result)
 
     def test_FteCart_type(self):
-        result = ft_ecart_type(self.column)
+        result = ft_gaps(self.column)
         expected_result = 1.5811388300841898
         self.assertTrue(isclose(result, expected_result))
 
