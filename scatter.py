@@ -31,8 +31,6 @@ def main() -> None:
 
     try:
         plt.show()
-    except KeyboardInterrupt:
-        pass
     except (RuntimeError, ValueError) as e:
         logging.error('Could not render the plot: %s', e)
 
