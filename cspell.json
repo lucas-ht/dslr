@@ -11,7 +11,9 @@
         "Arithmancy",
         "Herbology",
         "Datascience",
-        "dtypes"
+        "dtypes",
+        "xlabel",
+        "ylabel"
     ],
     "useGitignore": true,
     "ignorePaths": [
