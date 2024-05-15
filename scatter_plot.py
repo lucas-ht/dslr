@@ -12,7 +12,14 @@ from dslr.parser import Parser
 
 
 def main() -> None:
-    """ The main function to display a scatter of the dataset."""
+    """ 
+        The main function to display a scatter of the dataset.
+        Args:
+            file (str): The path to the dataset file.
+            first_course (str): The name of the first argument.
+            second_course (str): The name of the second argument.
+
+    """
     parser = Parser()
 
     parser.add_arg('first_course', str, 'The course to display the histogram for')
