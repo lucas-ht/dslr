@@ -22,8 +22,8 @@ def main() -> None:
     """
     parser = Parser()
 
-    parser.add_arg('first_course', str, 'The course to display the histogram for')
-    parser.add_arg('second_course', str, 'The course to display the histogram for')
+    parser.add_arg('first_course', str, 'The first course to displayed on the scatter plot')
+    parser.add_arg('second_course', str, 'The econd course to displayed on the scatter plot')
 
     df = parser.read_dataset()
     x = parser.read_course('first_course')
