@@ -28,7 +28,7 @@ def main() -> None:
         courses.append(parser.read_course(f'course{i}'))
     df = parser.read_dataset()
 
-    sns.pairplot(df, hue='Hogwarts House', vars=courses, diag_kind='hist')
+    sns.pairplot(df, hue='Hogwarts House', vars=courses, diag_kind='hist', height=2.0, aspect=1.5)
 
     try:
         plt.show()
