@@ -13,7 +13,8 @@
         "Datascience",
         "dtypes",
         "xlabel",
-        "ylabel"
+        "ylabel",
+        "pairplot"
     ],
     "useGitignore": true,
     "ignorePaths": [
