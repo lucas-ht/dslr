@@ -14,7 +14,10 @@
         "dtypes",
         "xlabel",
         "ylabel",
-        "pairplot"
+        "pairplot",
+        "ndarray",
+        "dropna",
+        "binarize"
     ],
     "useGitignore": true,
     "ignorePaths": [
