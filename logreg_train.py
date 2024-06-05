@@ -2,7 +2,12 @@
 This module is used to train a logistic regression model on the dataset.
 """
 
+import logging
+
+import numpy as np
+
 from dslr.parser import Parser
+from dslr.model.ovr import OvrClassifier
 from dslr.model.logistic_regression import LogisticRegression
 
 def main():
@@ -10,12 +15,14 @@ def main():
     The main function to train a logistic regression model on the dataset.
     """
 
+    logging.basicConfig(level=logging.DEBUG)
+
     df = Parser().read_dataset().dropna()
     x = Parser.get_x(df)
     y = Parser.get_y(df)
 
-    model = LogisticRegression()
-    model.fit(x, y[:, 0])
+    model = OvrClassifier(LogisticRegression)
+    model.fit(x, y)
 
     total_ok = 0
 
@@ -23,14 +30,16 @@ def main():
 
         result = model.predict(v)
 
-        if result > 0.8 and y[k][0] == 1:
+        predicted_class = np.argmax(result)
+        expected_class = np.argmax(y[k])
+
+        if predicted_class == expected_class:
             total_ok += 1
 
-        if result < 0.2 and y[k][0] == 0:
-            total_ok += 1
+        logging.debug('Prediction: %s, Expected: %s', predicted_class, expected_class)
 
+    logging.info('Accuracy: %.4f', total_ok / len(x))
 
-    print(f'Accuracy: {total_ok / len(x)}')
 
 if __name__ == '__main__':
     main()
