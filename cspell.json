@@ -18,7 +18,8 @@
         "ndarray",
         "dropna",
         "binarize",
-        "argmax"
+        "argmax",
+        "logreg"
     ],
     "useGitignore": true,
     "ignorePaths": [

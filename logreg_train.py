@@ -8,7 +8,8 @@ import numpy as np
 
 from dslr.parser import Parser
 from dslr.model.ovr import OvrClassifier
-from dslr.model.logistic_regression import LogisticRegression
+from dslr.model.logreg_batch import LogRegBatch
+
 
 def main():
     """
@@ -21,13 +22,14 @@ def main():
     x = Parser.get_x(df)
     y = Parser.get_y(df)
 
-    model = OvrClassifier(LogisticRegression)
+    model = OvrClassifier(LogRegBatch)
+
+    logging.info('Training models')
     model.fit(x, y)
+    logging.info('Training complete')
 
     total_ok = 0
-
     for (k, v) in enumerate(x):
-
         result = model.predict(v)
 
         predicted_class = np.argmax(result)
@@ -35,8 +37,6 @@ def main():
 
         if predicted_class == expected_class:
             total_ok += 1
-
-        logging.debug('Prediction: %s, Expected: %s', predicted_class, expected_class)
 
     logging.info('Accuracy: %.4f', total_ok / len(x))
 

@@ -5,15 +5,15 @@ This module contains the tests for the LogisticRegression class.
 import unittest
 import numpy as np
 
-from dslr.model.logistic_regression import LogisticRegression
+from dslr.model.logreg_batch import LogRegBatch
 
-class TestLogisticRegression(unittest.TestCase):
+class TestLogRegBatch(unittest.TestCase):
     """
     This class contains the tests for the LogisticRegression class.
     """
 
     def setUp(self):
-        self.log_reg = LogisticRegression(learning_rate=0.01, epochs=1000)
+        self.log_reg = LogRegBatch(learning_rate=0.01, epochs=1000)
 
 
     def test_sigmoid(self):
@@ -21,8 +21,7 @@ class TestLogisticRegression(unittest.TestCase):
         Test the sigmoid function.
         """
 
-        # pylint: disable=protected-access
-        self.assertEqual(self.log_reg._sigmoid(0), 0.5)
+        self.assertEqual(self.log_reg.sigmoid(0), 0.5)
 
 
     def test_fit(self):

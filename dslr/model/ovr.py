@@ -8,14 +8,15 @@ from typing import Type
 import numpy as np
 
 from dslr.hogwarts import HOGWARTS_HOUSES
-from dslr.model.logistic_regression import LogisticRegression
+from dslr.model.logreg import LogReg
+
 
 class OvrClassifier:
     """
     This class implements a One vs Rest classifier.
     """
 
-    def __init__(self, model: Type[LogisticRegression]):
+    def __init__(self, model: Type[LogReg]):
         self.model = model
         self.models = []
 
