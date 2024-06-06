@@ -7,7 +7,6 @@ from typing import Type
 
 import numpy as np
 
-from dslr.hogwarts import HOGWARTS_HOUSES
 from dslr.model.logreg import LogReg
 
 
@@ -27,11 +26,11 @@ class OvrClassifier:
         """
 
         self.models = []
-        for (key, value) in enumerate(HOGWARTS_HOUSES):
-            logging.info('Training model for class %s', value)
+        for i in range(y.shape[1]):
+            logging.info('Training model for class #%s', i)
 
             model = self.model()
-            model.fit(x, y[:, key])
+            model.fit(x, y[:, i])
 
             self.models.append(model)
 
