@@ -9,8 +9,11 @@ import sys
 from typing import Type
 
 import pandas as pd
+import numpy as np
+from sklearn.preprocessing import label_binarize
+from sklearn.preprocessing import normalize
 
-from dslr.hogwarts import HOGWARTS_COURSES
+from dslr.hogwarts import HOGWARTS_COURSES, HOGWARTS_HOUSE, HOGWARTS_HOUSES
 
 
 class Parser:
@@ -97,3 +100,28 @@ class Parser:
             sys.exit(1)
 
         return course
+
+    @staticmethod
+    def get_x(df: pd.DataFrame) -> np.ndarray:
+        """
+        This method is used to get the X values.
+        """
+
+        x = df.drop(columns=[
+            'Index',
+            'Hogwarts House',
+            'First Name',
+            'Last Name',
+            'Birthday',
+            'Best Hand',
+        ]).to_numpy()
+
+        return normalize(X=x, axis=0, norm='max') # type: ignore
+
+    @staticmethod
+    def get_y(df: pd.DataFrame) -> np.ndarray:
+        """
+        This method is used to get the y values.
+        """
+
+        return label_binarize(df[HOGWARTS_HOUSE], classes=HOGWARTS_HOUSES) # type: ignore
