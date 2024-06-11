@@ -125,3 +125,19 @@ class Parser:
         """
 
         return label_binarize(df[HOGWARTS_HOUSE], classes=HOGWARTS_HOUSES) # type: ignore
+
+    @staticmethod
+    def convert_predictions_to_labels(predictions, classes):
+        """
+        Convert one-hot encoded predictions back to original labels.
+    
+        Parameters:
+        predictions (np.ndarray): The one-hot encoded predictions.
+        classes (list): The list of original class labels.
+    
+        Returns:
+        list: The predicted labels.
+        """
+
+        predicted_index = np.argmax(predictions)
+        return classes[predicted_index]

@@ -7,6 +7,10 @@ from typing import Type
 
 import numpy as np
 
+
+from dslr.parser import Parser
+from dslr.hogwarts import HOGWARTS_HOUSES
+
 from dslr.model.logreg import LogReg
 
 
@@ -43,3 +47,21 @@ class OvrClassifier:
         return np.array(
             [model.predict(x) for model in self.models]
         )
+
+
+    def accuracy(self, x: np.ndarray, y: np.ndarray) -> float:
+        """
+        Calculate the accuracy of the model.
+        """
+        total_ok = 0
+        for (k, v) in enumerate(x):
+            result = self.predict(v)
+
+            predicted_class = np.argmax(result)
+            expected_class = np.argmax(y[k])
+
+            predicted_label = Parser.convert_predictions_to_labels(result, HOGWARTS_HOUSES)
+            print(f'Predicted: {predicted_label} ')
+            if predicted_class == expected_class:
+                total_ok += 1
+        return total_ok / len(x)
