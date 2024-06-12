@@ -10,10 +10,10 @@ from dslr.model.logreg import LogReg
 
 
 LEARNING_RATE = 0.01
-EPOCHS        = 1
+EPOCHS        = 5000
 
 
-class Sgd(LogReg):
+class LogRegStochastic(LogReg):
     """
         This class implements a logistic regression model using gradient descent
     """
@@ -35,20 +35,6 @@ class Sgd(LogReg):
         b = 0
         return w,b
 
-    def gradient_dw(self,x, y, w, b):
-        """In this function, we will compute the gradient w.r.to w """
-
-        yhat = self.sigmoid(np.dot(x, w) + b)
-        gradient = x * (yhat - y).reshape(-1,1) + (self.learning_rate * w/self.m)
-        return gradient
-
-    def gradient_db(self, x, y, w, b):
-        """In this function, we will compute the gradient w.r.to b """
-
-        yhat = self.sigmoid(np.dot(x, w) + b)
-        gradient = yhat - y
-        return gradient
-
 
     def fit(self, x: np.ndarray, y: np.ndarray) -> None:
         """
@@ -62,25 +48,32 @@ class Sgd(LogReg):
         """
 
         self.m = x.shape[0]
+
         self.x, self.y = x, y
         self.weights , self.bias = self.initialize_weights(self.x)
 
         logging.info('Starting training')
 
-        for _ in range(self.epochs):
-            for i in range(self.m):
-                dw = self.gradient_dw(self.x[i],
-                                    self.y[i],
-                                    self.weights,
-                                    self.bias)
-                db = self.gradient_db(self.x[i], self.y[i], self.weights, self.bias)
-                dw = np.sum(dw, axis=0)
-                db = np.sum(db, axis=0)
-                self.weights -= self.learning_rate * dw
-                self.bias -= self.learning_rate * db
+        for i in range(self.epochs):
+            j = i % self.m
+            self._update_weights(j)
+
         logging.info('Training complete')
+
         logging.debug('Weights: %s', self.weights)
         logging.debug('Bias: %s', self.bias)
+
+
+    def _update_weights(self, i) -> None:
+        linear_model = np.dot(self.x[i], self.weights) + self.bias
+        y_predicted = self.sigmoid(linear_model)
+
+        delta_prediction = y_predicted - self.y[i]
+        delta_weight = self.x[i] * delta_prediction + (self.weights / self.m)
+        delta_bias = (1 / self.m) * delta_prediction
+
+        self.weights -= self.learning_rate * delta_weight
+        self.bias -= self.learning_rate * delta_bias
 
 
     def predict(self, x: np.ndarray) -> float:

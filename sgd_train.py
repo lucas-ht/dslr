@@ -5,7 +5,7 @@ import logging
 
 from dslr.parser import Parser
 from dslr.model.ovr import OvrClassifier
-from dslr.model.stochastic_gradient_descent import Sgd
+from dslr.model.logreg_stochastic import LogRegStochastic
 
 def main():
     """
@@ -18,7 +18,7 @@ def main():
     x = Parser.get_x(df)
     y = Parser.get_y(df)
 
-    model = OvrClassifier(Sgd)
+    model = OvrClassifier(LogRegStochastic)
 
     logging.info('Training models')
     model.fit(x, y)

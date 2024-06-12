@@ -19,8 +19,7 @@
         "dropna",
         "binarize",
         "argmax",
-        "logreg",
-        "yhat"
+        "logreg"
     ],
     "useGitignore": true,
     "ignorePaths": [
