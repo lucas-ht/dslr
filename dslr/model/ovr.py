@@ -2,9 +2,10 @@
 OVR (One vs Rest) classifier
 """
 
+import sys
 import logging
-from typing import Type
 import json
+from typing import Type
 
 import numpy as np
 
@@ -79,17 +80,24 @@ class OvrClassifier:
                 models_data = json.load(file)
         except FileNotFoundError:
             logging.error('The file does not exist.')
-            return
+            sys.exit(1)
         except PermissionError:
             logging.error('You do not have permission to read this file.')
-            return
+            sys.exit(1)
         # pylint: disable=broad-except
         except Exception as e:
             logging.error('An error occurred while loading the model: %s', e)
+            sys.exit(1)
 
         self.models = []
         for model_data in models_data:
             model = self.model()
-            model.weights = np.array(model_data['weights'])
-            model.bias = model_data['bias']
+
+            try:
+                model.weights = np.array(model_data['weights'])
+                model.bias = model_data['bias']
+            except KeyError:
+                logging.error('The model data is invalid.')
+                sys.exit(1)
+
             self.models.append(model)
