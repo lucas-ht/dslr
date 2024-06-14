@@ -6,7 +6,7 @@ parsing command line arguments and reading the dataset.
 import argparse
 import logging
 import sys
-from typing import Type
+from typing import Type, List
 
 import pandas as pd
 import numpy as np
@@ -68,7 +68,8 @@ class Parser:
         except (FileNotFoundError, PermissionError, IsADirectoryError) as e:
             logging.error('Could not read the dataset from: `%s`: %s', file, e)
             sys.exit(1)
-        except (pd.errors.EmptyDataError, pd.errors.ParserError) as e:
+        # pylint: disable=broad-except
+        except Exception as e:
             logging.error('Could not parse the dataset from: `%s`: %s', file, e)
             sys.exit(1)
 
@@ -85,13 +86,25 @@ class Parser:
             pd.DataFrame: The filled dataset.
         """
 
-        return df.fillna(df.median())
+        median = df[HOGWARTS_COURSES].median()
+        df[HOGWARTS_COURSES] = df[HOGWARTS_COURSES].fillna(median)
+
+        return df
 
 
-    def read_model(self):
+    def read_arg(self, name: str) -> str:
         """
-        This method is used to read the model.
+        This method reads the argument from the command line arguments.
+
+        Args:
+            name (str): The name of the argument.
+
+        Returns:
+            str: The argument to read.
         """
+
+        args = self._parser.parse_args()
+        return getattr(args, name)
 
 
     def read_course(self, name: str) -> str:
@@ -108,8 +121,7 @@ class Parser:
             SystemExit: If the course is not valid.
         """
 
-        args = self._parser.parse_args()
-        course = getattr(args, name)
+        course = self.read_arg(name)
 
         if course not in HOGWARTS_COURSES:
             logging.error('`%s` is not a valid course.', course)
@@ -123,16 +135,22 @@ class Parser:
         This method is used to get the X values.
         """
 
-        x = df.drop(columns=[
-            'Index',
-            'Hogwarts House',
-            'First Name',
-            'Last Name',
-            'Birthday',
-            'Best Hand',
-        ]).to_numpy()
+        try:
+            x = df.drop(columns=[
+                'Index',
+                'Hogwarts House',
+                'First Name',
+                'Last Name',
+                'Birthday',
+                'Best Hand',
+            ]).to_numpy()
 
-        return normalize(X=x, axis=0, norm='max') # type: ignore
+            return normalize(X=x, axis=0, norm='max') # type: ignore
+
+        except (KeyError, ValueError) as e:
+            logging.error('Could not get the X values: %s', e)
+            sys.exit(1)
+
 
     @staticmethod
     def get_y(df: pd.DataFrame) -> np.ndarray:
@@ -140,20 +158,44 @@ class Parser:
         This method is used to get the y values.
         """
 
-        return label_binarize(df[HOGWARTS_HOUSE], classes=HOGWARTS_HOUSES) # type: ignore
+        try:
+            return label_binarize(df[HOGWARTS_HOUSE], classes=HOGWARTS_HOUSES) # type: ignore
+
+        except (KeyError, ValueError) as e:
+            logging.error('Could not get the y values: %s', e)
+            sys.exit(1)
+
 
     @staticmethod
-    def convert_predictions_to_labels(predictions, classes):
+    def convert_label(predictions: np.ndarray) -> str:
         """
-        Convert one-hot encoded predictions back to original labels.
-    
-        Parameters:
-        predictions (np.ndarray): The one-hot encoded predictions.
-        classes (list): The list of original class labels.
-    
+        This method is used to convert the predictions to the Hogwarts house.
+
+        Args:
+            predictions (np.ndarray): The predictions to convert.
+
         Returns:
-        list: The predicted labels.
+            str: The Hogwarts house.
         """
 
         predicted_index = np.argmax(predictions)
-        return classes[predicted_index]
+        return HOGWARTS_HOUSES[predicted_index]
+
+    @staticmethod
+    def save_houses(predictions: List[str]) -> None:
+        """
+        This method is used to save the predictions to a file.
+
+        Args:
+            predictions (np.ndarray): The predictions to save.
+        """
+
+        logging.info('Writing predictions to `houses.csv`')
+
+        try:
+            df = pd.DataFrame(predictions, columns=['Hogwarts House'])
+            df.to_csv('houses.csv', index_label='Index')
+        # pylint: disable=broad-except
+        except Exception as e:
+            logging.error('An error occurred: %s', e)
+            sys.exit(1)
