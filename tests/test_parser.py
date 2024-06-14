@@ -15,7 +15,7 @@ class TestParser(unittest.TestCase):
     This class contains the tests for the Parser class.
     """
 
-    @patch('sys.argv', ['dslr', 'test.csv'])
+    @patch('sys.argv', ['dslr', 'test.csv', 'batch'])
     def setUp(self):
         self.parser = Parser()
 
@@ -44,7 +44,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(cm.exception.code, 2)
 
 
-    @patch('sys.argv', ['dslr', 'test.csv'])
+    @patch('sys.argv', ['dslr', 'test.csv', 'batch'])
     @patch('builtins.open', side_effect=FileNotFoundError)
     def test_parse_dataset_not_found(self, _):
         """
@@ -57,7 +57,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(cm.exception.code, 1)
 
 
-    @patch('sys.argv', ['dslr', 'test.csv'])
+    @patch('sys.argv', ['dslr', 'test.csv', 'batch'])
     @patch('builtins.open', side_effect=PermissionError)
     def test_parse_dataset_permission_error(self, _):
         """
@@ -70,7 +70,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(cm.exception.code, 1)
 
 
-    @patch('sys.argv', ['dslr', 'test.csv'])
+    @patch('sys.argv', ['dslr', 'test.csv', 'batch'])
     @patch('builtins.open', new_callable=mock_open, read_data='a,b\n1.0,2.0\n')
     def test_parse_dataset(self, _):
         """
@@ -81,7 +81,7 @@ class TestParser(unittest.TestCase):
         pd_testing.assert_frame_equal(df, pd.DataFrame({'a': [1.0], 'b': [2.0]}))
 
 
-    @patch('sys.argv', ['dslr', 'test.csv'])
+    @patch('sys.argv', ['dslr', 'test.csv', 'batch'])
     def test_parse_course_arguments_none(self):
         """
         Test the parsing of a course when no arguments are passed.
@@ -95,7 +95,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(cm.exception.code, 2)
 
 
-    @patch('sys.argv', ['dslr', 'test.csv', 'foo'])
+    @patch('sys.argv', ['dslr', 'test.csv', 'batch', 'foo'])
     def test_parse_course_arguments_incorrect(self):
         """
         Test the parsing of a course when an incorrect argument is passed.
@@ -109,7 +109,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(cm.exception.code, 1)
 
 
-    @patch('sys.argv', ['dslr', 'test.csv', HOGWARTS_COURSES[0]])
+    @patch('sys.argv', ['dslr', 'test.csv', 'bach', HOGWARTS_COURSES[0]])
     def test_parse_course(self):
         """
         Test the parsing of a course when an incorrect argument is passed.
@@ -119,6 +119,27 @@ class TestParser(unittest.TestCase):
         course = self.parser.read_course('course')
 
         self.assertEqual(course, HOGWARTS_COURSES[0])
+
+
+
+    @patch('sys.argv', ['dslr', 'test.csv', 'LogRegBatch'])
+    def test_get_batch_valid(self):
+        """
+        Test get_batch method with a valid batch argument.
+        """
+        batch = self.parser.get_batch()
+        self.assertEqual(batch, 'LogRegBatch')
+
+    @patch('sys.argv', ['dslr', 'test.csv', 'InvalidBatch'])
+    def test_get_batch_invalid(self):
+        """
+        Test get_batch method with an invalid batch argument.
+        """
+
+        with self.assertRaises(SystemExit) as cm:
+            _ = self.parser.get_batch()
+
+        self.assertEqual(cm.exception.code, 1)
 
 
 if __name__ == '__main__':
