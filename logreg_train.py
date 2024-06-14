@@ -17,7 +17,8 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG)
 
-    df = Parser().read_dataset().dropna()
+    df = Parser().read_dataset()
+    df = Parser.fill_dataset(df)
 
     y = Parser.get_y(df)
     x = Parser.get_x(df)

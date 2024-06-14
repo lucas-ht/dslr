@@ -86,8 +86,8 @@ class Parser:
             pd.DataFrame: The filled dataset.
         """
 
-        median = df[HOGWARTS_COURSES].median()
-        df[HOGWARTS_COURSES] = df[HOGWARTS_COURSES].fillna(median)
+        for course in HOGWARTS_COURSES:
+            df[course] = df[course].fillna(df[course].mean())
 
         return df
 
@@ -180,6 +180,7 @@ class Parser:
 
         predicted_index = np.argmax(predictions)
         return HOGWARTS_HOUSES[predicted_index]
+
 
     @staticmethod
     def save_houses(predictions: List[str]) -> None:

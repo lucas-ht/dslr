@@ -25,7 +25,8 @@ def main():
     parser.add_arg('model', str, 'The path to the model file')
     model_path = parser.read_arg('model')
 
-    df = parser.read_dataset().dropna()
+    df = parser.read_dataset()
+    df = Parser.fill_dataset(df)
 
     y = Parser.get_y(df)
     x = Parser.get_x(df)
@@ -36,8 +37,8 @@ def main():
     logging.info('Predicting classes')
 
     predictions = []
-    for (_, v) in enumerate(x):
-        prediction = ovr.predict(v)
+    for value in x:
+        prediction = ovr.predict(value)
         predictions.append(np.argmax(prediction))
 
     logging.info('Prediction complete')

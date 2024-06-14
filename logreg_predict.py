@@ -33,8 +33,8 @@ def main():
     logging.info('Predicting classes')
 
     predictions = []
-    for (_, v) in enumerate(x):
-        prediction = ovr.predict(v)
+    for value in x:
+        prediction = ovr.predict(value)
         predictions.append(Parser.convert_label(prediction))
 
     logging.info('Prediction complete')
