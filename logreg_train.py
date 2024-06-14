@@ -8,6 +8,8 @@ import logging
 from dslr.parser import Parser
 from dslr.model.ovr import OvrClassifier
 from dslr.model.logreg_batch import LogRegBatch
+from dslr.model.logreg_stochastic import LogRegStochastic
+
 
 
 def main():
@@ -23,7 +25,15 @@ def main():
     y = Parser.get_y(df)
     x = Parser.get_x(df)
 
-    model = OvrClassifier(LogRegBatch)
+    arg =Parser().get_batch()
+    if arg == 'LogRegBatch':
+        batch = LogRegBatch
+    elif arg == 'LogRegStochastic':
+        batch = LogRegStochastic
+    else:
+        raise ValueError(f"Invalid model name: {arg}")
+
+    model = OvrClassifier(batch)
 
     logging.info('Training models')
     model.fit(x, y)
