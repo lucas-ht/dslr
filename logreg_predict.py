@@ -1,6 +1,7 @@
 """
 This module is used to predict the class of the input using the trained model.
 """
+# pylint:disable=duplicate-code
 
 import logging
 

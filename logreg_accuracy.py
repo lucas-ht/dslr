@@ -1,6 +1,7 @@
 """
 This module is used to train a logistic regression model on the dataset.
 """
+# pylint:disable=duplicate-code
 
 import logging
 
