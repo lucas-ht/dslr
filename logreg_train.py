@@ -27,7 +27,7 @@ def main():
 
     arg =Parser().get_batch()
     if arg != 'LogRegBatch':
-            model = OvrClassifier(LogRegStochastic)
+        model = OvrClassifier(LogRegStochastic)
     model = OvrClassifier(LogRegBatch)
 
     logging.info('Training models')
