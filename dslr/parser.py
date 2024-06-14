@@ -34,7 +34,7 @@ class Parser:
 
         self._parser = argparse.ArgumentParser()
         self._parser.add_argument('file', type=str, help='Path to the dataset file')
-        self._parser.add_argument('batch', type=str, help='The batch model to use')
+        self._parser.add_argument('batch', type=str, help='Model name')
 
     def add_arg(self, name: str, argument_type: Type, argument_help: str) -> None:
         """
@@ -50,22 +50,18 @@ class Parser:
 
     def get_batch(self) -> str:
         """
-        This method reads the batch model from the command line arguments.
+        This method reads the argument from the command line arguments.
 
         Returns:
-            Type: The batch model to read.
-
-        Raises:
-            SystemExit: If the batch model is not valid.
+            str: The argument to read.
         """
 
         args = self._parser.parse_args()
         batch = args.batch
 
-        if batch not in ['LogRegStochastic', 'LogRegBatch']:
-            logging.error('`%s` is not a valid batch model.', batch)
+        if batch not in ['LogRegBatch', 'LogRegStochastic']:
+            logging.error('`%s` is not a valid model.', batch)
             sys.exit(1)
-
         return batch
 
     def read_dataset(self) -> pd.DataFrame:

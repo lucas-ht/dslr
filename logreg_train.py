@@ -26,14 +26,9 @@ def main():
     x = Parser.get_x(df)
 
     arg =Parser().get_batch()
-    if arg == 'LogRegBatch':
-        batch = LogRegBatch
-    elif arg == 'LogRegStochastic':
-        batch = LogRegStochastic
-    else:
-        raise ValueError(f"Invalid model name: {arg}")
-
-    model = OvrClassifier(batch)
+    if arg != 'LogRegBatch':
+            model = OvrClassifier(LogRegStochastic)
+    model = OvrClassifier(LogRegBatch)
 
     logging.info('Training models')
     model.fit(x, y)

@@ -7,6 +7,7 @@ import numpy as np
 
 from dslr.model.logreg_batch import LogRegBatch
 
+
 class TestLogRegBatch(unittest.TestCase):
     """
     This class contains the tests for the LogisticRegression class.
