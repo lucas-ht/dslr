@@ -1,5 +1,9 @@
 ### Python ###
 
+# Project specific
+/model.json
+/houses.csv
+
 # VS Code settings
 .vscode/
 

@@ -1,10 +1,9 @@
 """
 This module is used to train a logistic regression model on the dataset.
 """
+# pylint:disable=duplicate-code
 
 import logging
-
-import numpy as np
 
 from dslr.parser import Parser
 from dslr.model.ovr import OvrClassifier
@@ -18,9 +17,11 @@ def main():
 
     logging.basicConfig(level=logging.DEBUG)
 
-    df = Parser().read_dataset().dropna()
-    x = Parser.get_x(df)
+    df = Parser().read_dataset()
+    df = Parser.fill_dataset(df)
+
     y = Parser.get_y(df)
+    x = Parser.get_x(df)
 
     model = OvrClassifier(LogRegBatch)
 
@@ -28,17 +29,7 @@ def main():
     model.fit(x, y)
     logging.info('Training complete')
 
-    total_ok = 0
-    for (k, v) in enumerate(x):
-        result = model.predict(v)
-
-        predicted_class = np.argmax(result)
-        expected_class = np.argmax(y[k])
-
-        if predicted_class == expected_class:
-            total_ok += 1
-
-    logging.info('Accuracy: %.4f', total_ok / len(x))
+    model.save_models('model.json')
 
 
 if __name__ == '__main__':

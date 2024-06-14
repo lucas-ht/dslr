@@ -2,14 +2,12 @@
 OVR (One vs Rest) classifier
 """
 
+import sys
 import logging
+import json
 from typing import Type
 
 import numpy as np
-
-
-from dslr.parser import Parser
-from dslr.hogwarts import HOGWARTS_HOUSES
 
 from dslr.model.logreg import LogReg
 
@@ -48,20 +46,58 @@ class OvrClassifier:
             [model.predict(x) for model in self.models]
         )
 
-
-    def accuracy(self, x: np.ndarray, y: np.ndarray) -> float:
+    def save_models(self, path: str) -> None:
         """
-        Calculate the accuracy of the model.
+        Save the model to a file.
         """
-        total_ok = 0
-        for (k, v) in enumerate(x):
-            result = self.predict(v)
 
-            predicted_class = np.argmax(result)
-            expected_class = np.argmax(y[k])
+        models_data = []
+        for model in self.models:
+            model_data = {
+                'weights': model.weights.tolist(),
+                'bias': model.bias
+            }
+            models_data.append(model_data)
 
-            predicted_label = Parser.convert_predictions_to_labels(result, HOGWARTS_HOUSES)
-            print(f'Predicted: {predicted_label} ')
-            if predicted_class == expected_class:
-                total_ok += 1
-        return total_ok / len(x)
+        try:
+            with open(path, 'w', encoding='utf-8') as file:
+                logging.debug('Saving the model to %s', path)
+                json.dump(models_data, file)
+        # pylint: disable=broad-except
+        except Exception as e:
+            logging.error('An error occurred while saving the model: %s', e)
+
+
+    def load_models(self, path: str) -> None:
+        """
+        Load the model from a file.
+        """
+
+        model_data = []
+        try:
+            with open(path, 'r', encoding='utf-8') as file:
+                logging.debug('Loading the model from %s', path)
+                models_data = json.load(file)
+        except FileNotFoundError:
+            logging.error('The file does not exist.')
+            sys.exit(1)
+        except PermissionError:
+            logging.error('You do not have permission to read this file.')
+            sys.exit(1)
+        # pylint: disable=broad-except
+        except Exception as e:
+            logging.error('An error occurred while loading the model: %s', e)
+            sys.exit(1)
+
+        self.models = []
+        for model_data in models_data:
+            model = self.model()
+
+            try:
+                model.weights = np.array(model_data['weights'])
+                model.bias = model_data['bias']
+            except KeyError:
+                logging.error('The model data is invalid.')
+                sys.exit(1)
+
+            self.models.append(model)
