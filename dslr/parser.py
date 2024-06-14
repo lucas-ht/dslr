@@ -6,13 +6,16 @@ parsing command line arguments and reading the dataset.
 import argparse
 import logging
 import sys
-from typing import Type, List
+from typing import Any, Type, List
 
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import label_binarize
 from sklearn.preprocessing import normalize
 
+from dslr.model.logreg import LogReg
+from dslr.model.logreg_batch import LogRegBatch
+from dslr.model.logreg_stochastic import LogRegStochastic
 from dslr.hogwarts import HOGWARTS_COURSES, HOGWARTS_HOUSE, HOGWARTS_HOUSES
 
 
@@ -36,7 +39,7 @@ class Parser:
         self._parser.add_argument('file', type=str, help='Path to the dataset file')
 
 
-    def add_arg(self, name: str, argument_type: Type, argument_help: str) -> None:
+    def add_arg(self, name: str, argument_type: Type, argument_help: str, **kwargs: Any) -> None:
         """
         This method adds an argument to the parser.
 
@@ -44,9 +47,10 @@ class Parser:
             name (str): The name of the argument.
             argument_type (Type): The type of the argument.
             argument_help (str): The help message for the argument.
+            **kwargs (Any): Additional keyword arguments for the argument.
         """
 
-        self._parser.add_argument(name, type=argument_type, help=argument_help)
+        self._parser.add_argument(name, type=argument_type, help=argument_help, **kwargs)
 
 
     def read_dataset(self) -> pd.DataFrame:
@@ -128,6 +132,29 @@ class Parser:
             sys.exit(1)
 
         return course
+
+
+    def read_model(self) -> Type[LogReg]:
+        """
+        This method reads the model from the command line arguments.
+
+        Returns:
+            Type: The model to read.
+
+        Raises:
+            SystemExit: If the model is not valid.
+        """
+
+        model = self.read_arg('model') or 'batch'
+
+        match model.lower():
+            case 'batch':
+                return LogRegBatch
+            case 'stochastic':
+                return LogRegStochastic
+            case _:
+                sys.exit(1)
+
 
     @staticmethod
     def get_x(df: pd.DataFrame) -> np.ndarray:

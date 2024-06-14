@@ -7,7 +7,6 @@ import logging
 
 from dslr.parser import Parser
 from dslr.model.ovr import OvrClassifier
-from dslr.model.logreg_batch import LogRegBatch
 
 
 def main():
@@ -19,15 +18,21 @@ def main():
 
     parser = Parser()
 
-    parser.add_arg('model', str, 'The path to the model file')
-    model_path = parser.read_arg('model')
+    parser.add_arg('model_path', str, 'The path to the model file')
+    parser.add_arg('--model', str, 'The model used',
+                   required=False, choices=['batch', 'stochastic'])
+
+    model_path = parser.read_arg('model_path')
+
+    model = parser.read_model()
+    logging.debug('Using model %s', model)
 
     df = parser.read_dataset()
     df = Parser.fill_dataset(df)
 
     x = Parser.get_x(df)
 
-    ovr = OvrClassifier(LogRegBatch)
+    ovr = OvrClassifier(model)
     ovr.load_models(model_path)
 
     logging.info('Predicting classes')
