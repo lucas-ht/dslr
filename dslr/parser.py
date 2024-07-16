@@ -90,8 +90,12 @@ class Parser:
             pd.DataFrame: The filled dataset.
         """
 
-        for course in HOGWARTS_COURSES:
-            df[course] = df[course].fillna(df[course].mean())
+        try:
+            for course in HOGWARTS_COURSES:
+                df[course] = df[course].fillna(df[course].mean())
+        except KeyError as e:
+            logging.error('Could not fill the dataset: %s', e)
+            sys.exit(1)
 
         return df
 

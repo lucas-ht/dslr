@@ -44,6 +44,8 @@ def describe(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     df = df.select_dtypes(include=np.number)
+    if df.empty:
+        return pd.DataFrame()
 
     df = df.agg([
         ft_len,

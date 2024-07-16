@@ -1,5 +1,5 @@
 """
-    This module is used to display a scatter of the dataset.
+This module is used to display a scatter plot of the dataset.
 """
 
 import logging
@@ -7,23 +7,18 @@ import logging
 import matplotlib.pyplot as plt
 
 from dslr.hogwarts import HOGWARTS_HOUSE
-
 from dslr.parser import Parser
 
 
 def main() -> None:
-    """ 
-        The main function to display a scatter of the dataset.
-        Args:
-            file (str): The path to the dataset file.
-            first_course (str): The name of the first argument.
-            second_course (str): The name of the second argument.
-
     """
+    The main function to display the scatter plot.
+    """
+
     parser = Parser()
 
-    parser.add_arg('first_course', str, 'The first course to displayed on the scatter plot')
-    parser.add_arg('second_course', str, 'The second course to displayed on the scatter plot')
+    parser.add_arg('first_course', str, 'The first course to display on the scatter plot')
+    parser.add_arg('second_course', str, 'The second course to display on the scatter plot')
 
     df = parser.read_dataset()
     x = parser.read_course('first_course')
