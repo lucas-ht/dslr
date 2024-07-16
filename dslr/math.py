@@ -1,168 +1,190 @@
 """
-    This module contains functions to calculate statistics of a given column. 
+This module contains functions to calculate statistics of a given column.
 """
-from math import ceil, floor
+from typing import Callable, Iterable, Any
+from math import ceil, floor, inf, sqrt
+from functools import wraps
+
 import pandas as pd
-import numpy as np
 
 
-def get_numeric_values(column: pd.Series):
+def dropna(func: Callable) -> Callable:
     """
-        Get the numeric values from a given column.
+    Decorator to drop NaN values from a column before applying a function.
+
+    Args:
+        func (Callable): The function to apply.
+        *args: The positional arguments to pass to the function.
+        **kwargs: The keyword arguments to pass to the function.
+
+    Returns:
+        Callable: The wrapper function.
     """
-    numeric_values = []
-    for x in column:
-        if pd.notnull(x):
-            numeric_values.append(x)
-    return numeric_values
+
+    @wraps(func)
+    def wrapper(column: pd.Series, *args, **kwargs) -> Any:
+        return func(column.dropna(), *args, **kwargs)
+
+    return wrapper
 
 
-def ft_sum(column):
+@dropna
+def ft_sum(column: pd.Series) -> float:
     """
-        Calculate the sum of a given column.
+    Calculate the sum of a given column.
+
+    Args:
+        column (pd.Series): The column to calculate the sum of.
+
+    Returns:
+        float: The sum of the column.
     """
-    numeric_values = get_numeric_values(column)
-    sum_total = 0
-    for value in numeric_values:
-        if pd.notnull(value):
-            sum_total += value
-    return sum_total
+
+    total = 0
+    for value in column:
+        total += value
+    return total
 
 
-def ft_len(column):
+def ft_len(column: pd.Series | Iterable) -> int:
     """
-        Calculate the length of a given column.
+    Calculate the length of a given column.
+
+    Args:
+        column (pd.Series | Iterable): The column to calculate the length of.
+
+    Returns:
+        int: The length of the column.
     """
+
     length = 0
     for _ in column:
         length += 1
     return length
 
 
-def ft_min(column: pd.Series):
+@dropna
+def ft_min(column: pd.Series) -> float:
     """
-        Calculate the minimum value of a given column.
-    """
-    numeric_values = get_numeric_values(column)
-    min_value = None
-    if numeric_values:
-        for value in numeric_values:
-            if min_value is None or value < min_value:
-                min_value = value
-        return min_value
-    return np.nan
+    Calculate the minimum value of a given column.
 
-
-def ft_max(column):
-    """
-        Calculate the maximum value of a given column.
-    """
-    numeric_values = get_numeric_values(column)
-    max_value = None
-    if numeric_values:
-        for value in numeric_values:
-            if max_value is None or value > max_value:
-                max_value = value
-        return max_value
-    return np.nan
-
-
-def ft_count(column):
-    """ Calculate the number of values in a given column."""
-    numeric_values = get_numeric_values(column)
-    return ft_len(numeric_values)
-
-
-def ft_mean(column):
-    """
-        Calculate the mean of a given column.
-    """
-    numeric_values = get_numeric_values(column)
-    if numeric_values:
-        return ft_sum(numeric_values) / ft_len(numeric_values)
-    return np.nan
-
-
-def ft_variance(column):
-    """
-        Calculate the variance of a given column.
-    """
-    numeric_values = get_numeric_values(column)
-    mean = ft_mean(numeric_values)
-    items = 0
-    for x in numeric_values:
-        if pd.notnull(x):
-            items += (x - mean) ** 2
-    return items / (ft_len(numeric_values) - 1)
-
-
-def ft_gaps(column):
-    """
-        Calculate the standard deviation of a given column.
-    """
-    grp = ft_variance(column)
-    return np.sqrt(grp)
-
-
-def calculate_quartile(column, quartile: float):
-    """
-    Calculate the quartile value for a given column.
     Args:
-        column (pandas.Series): The column containing numeric values.
-        quartile (float): The quartile value to calculate
-        (0.25 for first quartile, 0.5 for median, 0.75 for third quartile).
+        column (pd.Series): The column to calculate the minimum value of.
+
     Returns:
-        float: The calculated quartile value.
+        float: The minimum value of the column.
     """
-    numeric_values = sorted(x for x in column if pd.notnull(x))
-    if numeric_values:
-        index = (ft_len(numeric_values) - 1) * quartile
-        if index.is_integer():
-            return numeric_values[int(index)]
-        lower = numeric_values[floor(index)] * (ceil(index) - index)
-        upper = numeric_values[ceil(index)] * (index - floor(index))
-        return upper + lower
-    return np.nan
+
+    min_value = inf
+    for value in column:
+        min_value = value if value < min_value else min_value
+    return min_value
 
 
-def percentile_25(column):
+@dropna
+def ft_max(column: pd.Series) -> float:
     """
-        Calculate the 25th percentile of a given column.
+    Calculate the maximum value of a given column.
+
+    Args:
+        column (pd.Series): The column to calculate the maximum value of.
+
+    Returns:
+        float: The maximum value of the column.
     """
-    return calculate_quartile(column, 0.25)
+
+    max_value = -inf
+    for value in column:
+        max_value = value if value > max_value else max_value
+    return max_value
 
 
-def percentile_50(column):
+@dropna
+def ft_mean(column: pd.Series) -> float:
     """
-        Calculate the median of a given column.
+    Calculate the mean of a given column.
+
+    Args:
+        column (pd.Series): The column to calculate the mean of.
+
+    Returns:
+        float: The mean of the column.
     """
-    return calculate_quartile(column, 0.5)
+
+    return ft_sum(column) / ft_len(column)
 
 
-def percentile_75(column):
+@dropna
+def ft_variance(column: pd.Series) -> float:
     """
-        Calculate the 75th percentile of a given column.
+    Calculate the variance of a given column.
+
+    Args:
+        column (pd.Series): The column to calculate the variance of.
+
+    Returns:
+        float: The variance of the column
     """
-    return calculate_quartile(column, 0.75)
+
+    mean = ft_mean(column)
+    total = 0
+
+    for value in column:
+        total += (value - mean) ** 2
+
+    return total / (ft_len(column) - 1)
 
 
-def ft_std(column):
+@dropna
+def ft_std(column: pd.Series) -> float:
     """
-        Calculate the standard deviation of a column.
+    Calculate the standard deviation of a column.
+
+    Args:
+        column (pd.Series): The column to calculate the standard deviation of.
+
+    Returns:
+        float: The standard deviation of the column.
     """
-    numeric_values = get_numeric_values(column)
-    mean = ft_mean(numeric_values)
-    sum_std = 0
-    for x in numeric_values:
-        if pd.notnull(x):
-            sum_std += (x - mean) ** 2
-    std = np.sqrt(sum_std / (ft_len(numeric_values) - 1))
-    return std
+
+    variance = ft_variance(column)
+    return sqrt(variance)
 
 
-def ft_unique(column):
+@dropna
+def ft_percentile(column: pd.Series, percentile: float) -> float:
     """
-        Calculate the number of unique values in a column.
+    Calculate the percentile of a given column.
+
+    Args:
+        column (pd.Series): The column to calculate the percentile of.
+        percentile (float): The percentile to calculate.
+
+    Returns:
+        float: The percentile of the column.
     """
-    numeric_values = get_numeric_values(column)
-    return ft_len(set(numeric_values))
+
+    values = column.sort_values().reset_index(drop=True)
+    index = (ft_len(values) - 1) * percentile
+
+    if index.is_integer():
+        return values[int(index)]
+
+    lower = values[floor(index)] * (ceil(index) - index)
+    upper = values[ceil(index)] * (index - floor(index))
+
+    return upper + lower
+
+
+def ft_unique(column: pd.Series) -> int:
+    """
+    Calculate the number of unique values in a column.
+
+    Args:
+        column (pd.Series): The column to calculate the number of unique values of.
+
+    Returns:
+        int: The number of unique values in the column.
+    """
+
+    return ft_len(set(column))

@@ -4,70 +4,88 @@ This module contains the describe implementation.
 
 import pandas as pd
 import numpy as np
+
 from dslr.parser import Parser
 from dslr.math import (
+    ft_len,
     ft_min,
     ft_max,
-    ft_count,
     ft_mean,
     ft_variance,
-    ft_gaps,
-    percentile_25,
-    percentile_50,
-    percentile_75,
+    ft_percentile,
     ft_std,
     ft_unique
 )
 
 
-def format_series(series):
+def format_df(df: pd.Series) -> pd.Series:
     """
-        Format the series.
+    Format the DataFrame.
+
+    Args:
+        df: The DataFrame to format.
+
+    Returns:
+        The formatted DataFrame.
     """
-    return series.map(lambda x: f"{x:.6f}")
+
+    return df.map(lambda x: f"{x:.6f}")
 
 
-def describe(df: pd.DataFrame):
+def describe(df: pd.DataFrame) -> pd.DataFrame:
     """
-        Calculate descriptive statistics for the dataset..
-    """
-    data = df[df.select_dtypes(include=np.number).columns]
+    Calculate descriptive statistics for the dataset.
 
-    result = data.agg([
-        ft_count,
+    Args:
+        df (pd.DataFrame): The dataset.
+
+    Returns:
+        pd.DataFrame: The descriptive statistics.
+    """
+
+    df = df.select_dtypes(include=np.number)
+
+    df = df.agg([
+        ft_len,
         ft_mean,
         ft_std,
         ft_min,
-        percentile_25,
-        percentile_50,
-        percentile_75,
+        lambda x: ft_percentile(x, .25),
+        lambda x: ft_percentile(x, .50),
+        lambda x: ft_percentile(x, .75),
         ft_max,
         ft_unique,
         ft_variance,
-        ft_gaps
     ], axis=0)
 
-    result.index = [
-        'count', 'mean', 'std', 'min',
-        '25%', '50%', '75%', 'max', 'unique',
-        'variance', 'grp'
-    ]
-    result = result.apply(format_series)
-    print(result)
-    return result
+    df.index = pd.Index([
+        'count',
+        'mean',
+        'std',
+        'min',
+        '25%',
+        '50%',
+        '75%',
+        'max',
+        'unique',
+        'variance',
+    ])
+
+    return df.apply(format_df)
 
 
-def main():
+def main() -> None:
     """
     The main function of the describe module.
     """
 
-    data = Parser().read_dataset()
-    print('Describe Function')
-    describe(data)
-    print()
-    print('Describe from Pandas')
-    print(data.describe())
+    df = Parser().read_dataset()
+
+    print('Our Describe')
+    print(f'{describe(df)}\n')
+
+    print('Pandas\' Describe')
+    print(df.describe())
 
 
 if __name__ == '__main__':
