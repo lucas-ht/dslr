@@ -12,7 +12,7 @@ BATCH_LEARNING_RATE = 1e-2
 BATCH_EPOCHS        = int(5e+4)
 
 
-# pylint: disable=too-many-instance-attributes
+# pylint: disable=too-many-instance-attributes,duplicate-code
 class LogRegBatch(LogReg):
     """
     This class implements a logistic regression model using gradient descent.
