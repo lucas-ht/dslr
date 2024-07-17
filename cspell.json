@@ -20,7 +20,8 @@
         "binarize",
         "argmax",
         "logreg",
-        "fillna"
+        "fillna",
+        "mathbf",
     ],
     "useGitignore": true,
     "ignorePaths": [
